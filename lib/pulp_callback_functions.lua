@@ -1,0 +1,17 @@
+
+
+playdate.AButtonDown()
+playdate.AButtonUp()
+playdate.BButtonDown()
+playdate.BButtonUp()
+playdate.upButtonDown()
+playdate.upButtonUp()
+playdate.downButtonDown()
+playdate.downButtonUp()
+playdate.leftButtonDown()
+playdate.leftButtonUp()
+playdate.rightButtonDown()
+playdate.rightButtonUp()
+playdate.update()
+playdate.keyPressed(key)
+playdate.debugDraw()
