@@ -168,6 +168,8 @@ function minigame_template.cranked(change, acceleratedChange)
 
 end
 
+-- make sure to add put your name in "credits.json" and add "credits.gif" to the minigame's root folder. 
+	--> These will be used to credit your game during the overarching game's credits sequence!
 
 -- Minigame package should return itself
 return minigame_template
