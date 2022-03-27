@@ -10,7 +10,7 @@ The minigame framework will load a minigame which is programmed similar to a nor
 To get started, clone this repository. In z-shell:
 git clone https://github.com/aloebach/Minigame-Jam.git
 
-Once you've cloned the repository open minigames/minigame-template, and follow the instructins from there! After you've set up your own minigame using the template, you can set the DEBUG_GAME variable in main.lua to the name of your minigame to test! Finally, once you've succesfully tested your new minigame, simply add it to `minigame_list.lua`, and you've sucesfully added your own game to the Moware Minigames framework!
+Once you've cloned the repository open minigames/minigame-template, and follow the instructins from there! After you've set up your own minigame using the template, you can set the DEBUG_GAME variable in `main.lua` to the name of your minigame to test! Finally, once you've succesfully tested your new minigame, simply add it to the list in  `minigame_list.lua`, and you've sucesfully added your own game to the Moware Minigames framework!
 
 
 _____________________________
