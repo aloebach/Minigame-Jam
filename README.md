@@ -7,9 +7,10 @@ Designed for the Playdate, this framework will allow you to compile your own min
 
 The minigame framework will load a minigame which is programmed similar to a normal playdate game. See the minigame template in the minigame folder for details!
 
-To get started, clone this repository. 
+To get started, clone the repository. 
 In z-shell: `git clone https://github.com/aloebach/Minigame-Jam.git`
-Rename and edit `minigame_template`
+
+Rename and edit the `minigame_template` folder 
 To compile and rule the minigame jame pdx use the following command in z-shell:
 `pdc ./Minigame-Jam  minigame_jam.pdx && open minigame_jam.pdx`
 
