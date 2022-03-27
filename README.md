@@ -7,8 +7,11 @@ Designed for the Playdate, this framework will allow you to compile your own min
 
 The minigame framework will load a minigame which is programmed similar to a normal playdate game. See the minigame template in the minigame folder for details!
 
-To get started, clone this repository. In z-shell:
-git clone https://github.com/aloebach/Minigame-Jam.git
+To get started, clone this repository. 
+In z-shell: `git clone https://github.com/aloebach/Minigame-Jam.git`
+Rename and edit `minigame_template`
+To compile and rule the minigame jame pdx use the following command in z-shell:
+`pdc ./Minigame-Jam  minigame_jam.pdx && open minigame_jam.pdx`
 
 Once you've cloned the repository open minigames/minigame-template, and follow the instructions from there! After you've set up your own minigame using the template, you can set the DEBUG_GAME variable in `main.lua` to the name of your minigame to test. Finally, once you've succesfully tested your new minigame, simply add it to the list in  `minigame_list.lua`, and you've sucesfully added your own game to the Moware Minigames framework!
 
