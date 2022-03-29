@@ -16,6 +16,16 @@ To compile and rule the minigame jame pdx use the following command in z-shell:
 
 Once you've cloned the repository open minigames/minigame-template, and follow the instructions from there! After you've set up your own minigame using the template, you can set the DEBUG_GAME variable in `main.lua` to the name of your minigame to test. Finally, once you've succesfully tested your new minigame, simply add it to the list in  `minigame_list.lua`, and you've successfully added your own game to the Moware Minigames framework!
 
+_________
+Minigame guidelines: 
+Minigames should not last longer 10s or so.
+The minigame should be in its own folder under "minigames", and the <minigame_name> folder should have the same name as <minigame_name>.lua
+<minigame_name>.lua should contain <minigame_name>.update(), similar to playdate.update(), which is called every frame
+Playdate's additional callback functions are supported, but will be named the <minigame_name> equivalent. 
+  
+<minigame_name>.update() should return a 1 if the player won, or a 0 if the player lost
+credits.json should be in the minigame's root folder and contain the credits to be included in the game's final credits
+credits.gif should be a Gif to be displayed for the minigame in the credits sequence, no larger than 180 x 180
 
 _____________________________
 License information:
