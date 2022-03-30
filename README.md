@@ -17,7 +17,7 @@ To compile and rule the minigame jame pdx use the following command in z-shell:
 Once you've cloned the repository open minigames/minigame-template, and follow the instructions from there! After you've set up your own minigame using the template, you can set the DEBUG_GAME variable in `main.lua` to the name of your minigame to test. Finally, once you've succesfully tested your new minigame, simply add it to the list in  `minigame_list.lua`, and you've successfully added your own game to the Moware Minigames framework!
 
 
-#Minigame guidelines 
+# Minigame guidelines 
 Minigames should not last longer 10s or so.
 The minigame should be in its own folder under "minigames", and the <minigame_name> folder should have the same name as <minigame_name>.lua. all necessary files such a libraries, music and image files are contained within the individual minigame's folders, and the games can reference them accordingly. 
 <minigame_name>.lua must contain <minigame_name>.update(), similar to playdate.update(), which is called every frame
