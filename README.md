@@ -17,18 +17,18 @@ To compile and rule the minigame jame pdx use the following command in z-shell:
 Once you've cloned the repository open minigames/minigame-template, and follow the instructions from there! After you've set up your own minigame using the template, you can set the DEBUG_GAME variable in `main.lua` to the name of your minigame to test. Finally, once you've succesfully tested your new minigame, simply add it to the list in  `minigame_list.lua`, and you've successfully added your own game to the Moware Minigames framework!
 
 
-# Minigame guidelines 
-Minigames should not last longer 10s or so.
-The minigame should be in its own folder under "minigames", and the <minigame_name> folder should have the same name as <minigame_name>.lua. all necessary files such a libraries, music and image files are contained within the individual minigame's folders, and the games can reference them accordingly. 
-<minigame_name>.lua must contain <minigame_name>.update(), similar to playdate.update(), which is called every frame
+## Minigame guidelines 
+* Minigames should not last longer 10s or so.
+* The minigame should be in its own folder under "minigames", and the <minigame_name> folder should have the same name as <minigame_name>.lua. 
+* All necessary files such a libraries, music and image files should be contained within the individual minigame's folders, and the games can reference them accordingly. 
+* <minigame_name>.lua must contain <minigame_name>.update(), similar to playdate.update(), which is called every frame
 Playdate's additional callback functions are supported, but will be named the <minigame_name> equivalent. 
-  
-<minigame_name>.update() should return a 1 if the player won, or a 0 if the player lost
-credits.json should be in the minigame's root folder and contain the credits to be included in the game's final credits
-credits.gif should be a Gif to be displayed for the minigame in the credits sequence, no larger than 180 x 180
+* <minigame_name>.update() should return a 1 if the player won, or a 0 if the player lost
+* credits.json should be in the minigame's root folder and contain the credits to be included in the game's final credits
+* credits.gif should be a Gif to be displayed for the minigame in the credits sequence, no larger than 180 x 180
+* the main game will start at 20 fps and slowly increase to 40 fps. Keep this in mind when programming your minigame so that it scales accordingly and it's playable both at 20 and 40 fps
 
-
-# License information
+## License information
 Code for the Minigame-Jam is licensed under Creative Commons Attribution-NonCommercial 4.0 International license.
 https://creativecommons.org/licenses/by-nc/4.0/
 
