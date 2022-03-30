@@ -71,7 +71,7 @@ mobware.BbuttonIndicator.start()
 
 
 --[[
-	function <minigame name>:update()
+	function <minigame name>.update()
 
 	This function is what will be called every frame to run the minigame. 
 	NOTE: The main game will initially set the framerate to call this at 20 FPS to start, and will gradually speed up to 40 FPS
@@ -170,6 +170,8 @@ end
 
 -- make sure to add put your name in "credits.json" and add "credits.gif" to the minigame's root folder. 
 	--> These will be used to credit your game during the overarching game's credits sequence!
+
+--> Finally, go to main.lua and search for "DEBUG_GAME". You'll want to set this to the name of your minigame so that your minigame gets loaded every turn!
 
 -- Minigame package should return itself
 return minigame_template
