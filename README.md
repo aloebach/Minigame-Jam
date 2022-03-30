@@ -28,7 +28,7 @@ credits.json should be in the minigame's root folder and contain the credits to 
 credits.gif should be a Gif to be displayed for the minigame in the credits sequence, no larger than 180 x 180
 
 
-#License information
+# License information
 Code for the Minigame-Jam is licensed under Creative Commons Attribution-NonCommercial 4.0 International license.
 https://creativecommons.org/licenses/by-nc/4.0/
 
