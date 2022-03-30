@@ -11,10 +11,10 @@ To get started, clone the repository.
 In z-shell: `git clone https://github.com/aloebach/Minigame-Jam.git`
 
 Rename and edit the `minigame_template` folder 
-To compile and rule the minigame jame pdx use the following command in z-shell:
+To compile and run the minigame jam game file, use the following command in z-shell:
 `pdc ./Minigame-Jam  minigame_jam.pdx && open minigame_jam.pdx`
 
-Once you've cloned the repository open minigames/minigame-template, and follow the instructions from there! After you've set up your own minigame using the template, you can set the DEBUG_GAME variable in `main.lua` to the name of your minigame to test. Finally, once you've succesfully tested your new minigame, simply add it to the list in  `minigame_list.lua`, and you've successfully added your own game to the Moware Minigames framework!
+Once you've cloned the repository, open minigames/minigame-template and follow the instructions from there! After you've set up your own minigame using the template, you can set the DEBUG_GAME variable in `main.lua` to the name of your minigame to test. Finally, once you've succesfully tested your new minigame, simply add it to the list in `minigame_list.lua`, and you've successfully added your own game to the Mobware Minigames framework!
 
 
 ## Minigame guidelines 
