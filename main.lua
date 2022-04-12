@@ -1,23 +1,19 @@
 --[[
-	MobWare Minigames
-	
+	MobWare Minigames - Minigame jam edition!
+		
 	Author: Andrew Loebach
 	loebach@gmail.com
 
 --This main program will reference the Minigames, and run the minigames by calling their functions to run the minigame's logic
-
-To-Do's:
--Add references to frame timers -> minigames should use frame timers so that the difficulty scales properly
--Add story-linked transition animations and polish main game interface
--Add opening sequence
--Add ending sequence
--Add menu including bonus games / features
--Define custom menu
 ]]
 
 -- debug variables:
 -- Set "DEBUG_GAME" variable to the name of the minigame you want to test and it'll be chosen every time
---DEBUG_GAME = "bird_hunt"
+--DEBUG_GAME = "rock_paper_scissors"
+--DEBUG_GAME = "key_to_success"
+--DEBUG_GAME = "solo_pong"
+--DEBUG_GAME = "labyrinth"
+
 --SET_FRAME_RATE = 40
 
 -- Import CoreLibs
@@ -58,10 +54,11 @@ function Mobware_load()
 	score = 0
 	lives = 3
 
-	-- initialize spritesheets for transitions
-	playdate_spritesheet = gfx.imagetable.new("images/playdate_spinning")
-	demon_spritesheet = gfx.imagetable.new("images/demon_big")
-	
+	-- initialize sprites for transitions
+	background_image = gfx.image.new("images/game_jam_background") 
+	drummer_spritesheet = gfx.imagetable.new("images/drummer")
+	fan_spritesheet = gfx.imagetable.new("images/jam_fan")
+		
 	GameState = 'start' -- variable for game state
 
     -- the state of our game; can be any of the following:
@@ -76,13 +73,15 @@ function Mobware_load()
 	time_scaler = 0 --initial value for variable used to speed up game speed over time
 	playdate.display.setRefreshRate( SET_FRAME_RATE or math.min(20 + time_scaler, 40) )
 
-
 	-- initialize fonts
 	mobware_font_S = gfx.font.new("fonts/Mobware_S")
 	mobware_font_M = gfx.font.new("fonts/Mobware_M")
 	mobware_font_L = gfx.font.new("fonts/Mobware_L")
 	mobware_default_font = mobware_font_M
 	gfx.setFont(mobware_default_font)
+	
+	--> initialize music
+	jam_music = playdate.sound.fileplayer.new('sounds/jam')
 
 end
 
@@ -90,13 +89,17 @@ end
 Mobware_load()
 
 
+
 function playdate.update()
 
 
 	if GameState == 'start' then
 		-- Run file to play opening
-		--playdate.file.run('opening') -- HERE IS WHERE THE GAME INTRO WILL BE, BUT STILL ISN'T FINISHED
-		GameState = 'initialize'
+		--GameState = 'initialize'
+		
+		-- load transition animation
+		GameState = 'transition' 
+		load_transition()
 
 
 	elseif GameState == 'initialize' then 
@@ -106,8 +109,7 @@ function playdate.update()
 		local game_file = 'Minigames/' .. minigame .. '/' .. minigame -- build minigame file path 
 		
 		-- Clean up graphical environment for minigame
-		gfx.clear( gfx.kColorWhite )
-		gfx.sprite.removeAll()
+		minigame_cleanup()
 
 		-- Load minigame package:
 		_minigame = {}	-- create new environment for minigame
@@ -141,24 +143,14 @@ function playdate.update()
 				--if the player's score is sufficiently high, show credits
 				if score == GAME_WINNING_SCORE then GameState = 'credits' end
 
-				-- increase game speed after each successfull minigame:
+				-- increase game speed after each successful minigame:
 				time_scaler = time_scaler + 1
 			end
-
-			-- Set up PlayDate sprite for transition animation
-			demon_sprite = AnimatedSprite.new( demon_spritesheet )
-			demon_sprite:addState("animate", nil, nil, {tickStep = 3}, true)
-			demon_sprite:moveTo(200, 120)
-			demon_sprite:setZIndex(1)
-
-			playdate_sprite = AnimatedSprite.new( playdate_spritesheet )
-			playdate_sprite:addState("animate", 1, 18, {tickStep = 1, yoyo = true, loop = 2}, true)
-			playdate_sprite:moveTo(200, 120)
-			playdate_sprite:setZIndex(2)
-
-			timer = playdate.timer.new(2100)
-			-- playdate.easingFunctions.outCubic(t, b, c, d) 
-			-- playdate.easingFunctions.outCubic(timer.currentTime, 120, 120, d) 
+	
+			-- initialize transition graphics and music if we're entering the transition gamestate		
+			if GameState == 'transition' then
+				load_transition()
+			end
 
 		end
 
@@ -166,31 +158,19 @@ function playdate.update()
 	elseif GameState == 'transition' then
 		-- Play transition animation between minigames
 
-		-- TO-DO: UPDATE WITH ANTAGONIST ANIMATIONS FOR VICTORY AND DEFEAT, 
-		-- AND REPLACE ROTATION WITH PRERENDERED VERSION TO AVOID SLOWDOWN ON PLAYDATE HARDWARE
-
 		-- update timer
 		playdate.timer.updateTimers()
 
-		--[[NEW CODE
-		print("time:",timer.currentTime)
-		local new_y
-		if timer.currentTime <= 10000 then
-			new_y = playdate.easingFunctions.outCubic(timer.currentTime, 120, 120, 1000) 
-		else
-			new_y = playdate.easingFunctions.outCubic(timer.currentTime, 240, -120, 1000) 
+		if timer.currentTime >= 2100 then 
+			GameState = 'initialize' 
+			jam_music:stop()
 		end
-		playdate_sprite:moveTo(200, new_y)
-		--END NEW CODE]]
-
-		if timer.currentTime >= 2100 then GameState = 'initialize' end
-
 
 
 	elseif GameState == 'game_over' then
 		-- TO-DO: UPDATE WITH GAME OVER SEQUENCE
-
-  		-- Display game over screen
+		
+		-- Display game over screen
 		gfx.clear(gfx.kColorBlack)
 		gfx.setFont(mobware_font_M)
 		mobware.print("GAME OVER!")  
@@ -203,6 +183,7 @@ function playdate.update()
 	elseif GameState == 'credits' then
 		-- Play credits sequence
 
+		jam_music:stop() -- stop transition music
 		minigame_cleanup()
 
 		-- load "credits" as minigame
@@ -224,14 +205,12 @@ function playdate.update()
 		gfx.sprite.update() -- updates all sprites
 
 		-- display UI for transition
-		--gfx.setFont(mobware_font_M)
-		--mobware.print("Mobware Minigames!", 15, 15)
+		gfx.setFont(mobware_font_M)
+		mobware.print("Minigame Jam!", 185, 200)
 
 		gfx.setFont(mobware_font_S)
-		--gfx.drawText("score: " .. score, 10, 50)
-		mobware.print("score: " .. score, 10, 20)
-		--gfx.drawText("lives: " .. lives, 10, 65)
-		mobware.print("lives: " .. lives, 10, 65)
+		mobware.print("score: " .. score, 20, 20)
+		mobware.print("lives: " .. lives, 20, 65)
 
 		-- reset font to default
 		gfx.setFont(mobware_default_font)
@@ -242,14 +221,12 @@ end
 
 -- Callback functions for Playdate inputs:
 
---if GameState == 'play' then
-
 -- Callback functions for crank
 function playdate.cranked(change, acceleratedChange) if game and game.cranked then game.cranked(change, acceleratedChange) end end
 function playdate.crankDocked() if game and game.crankDocked then game.crankDocked() end end
 function playdate.crankUndocked() if game and game.crankDocked then game.crankUndocked() end end
 
--- Callback functdions for button presses:
+-- Callback functions for button presses:
 function playdate.AButtonDown() if game and game.AButtonDown then game.AButtonDown() end end
 function playdate.AButtonHeld() if game and game.AButtonHeld then game.AButtonHeld() end end
 function playdate.AButtonUp() if game and game.AButtonUp then game.AButtonUp() end end
@@ -266,39 +243,12 @@ function playdate.upButtonDown() if game and game.upButtonDown then game.upButto
 function playdate.upButtonUp() if game and game.upButtonUp then game.upButtonUp() end end
 
 
--- <TEST CODE FOR MESSING AROUND WITH MENU OPTIONS>
--- Add age selection
-playdate.getSystemMenu():addOptionsMenuItem(
-    'age',
-    { '0-18', '18-30', '30+' },
-    function(selectedOption)
-        print(selectedOption)
-    end
-)
--- Add option to return to main menu
-playdate.getSystemMenu():addMenuItem(
-    'MW Menu',
-    function()
-    	-- Reset default display values, clear sprites, and collect garbage
-		minigame_cleanup()
-        GameState = "start"
-    end
-)
--- <END TEST CODE>
-
-
--- For debugging
-function  playdate.keyPressed(key)
-	if GameState == 'play' then pcall(game.keyPressed, game, key) end 
-	
-	--Debugging code for memory management
-	print("Memory used: " .. math.floor(collectgarbage("count")))
-
-	if key == "c" then print('Sprite count: ', gfx.sprite.spriteCount() ) end
-end
-
-
 function minigame_cleanup()
+	--NOTE: UNLOADING MINIGAME BEOFRE CLEARING GRAPHICS AND SPRITES TO ENSURE NO CALLBACK FUNCTIONS ARE CALLED IN THE MEANTIME
+	-- unload minigame package
+	game = nil
+	_minigame = nil
+
 	-- Reset values for main game and clean up assets/memory
 	gfx.clear()
 	playdate.display.setRefreshRate( SET_FRAME_RATE or math.min(20 + time_scaler, 40) )
@@ -311,7 +261,40 @@ function minigame_cleanup()
 	gfx.setFont(mobware_default_font)
 
 	--trigger garbage collection to clear up memory
-	game = nil
-	_minigame = nil
 	collectgarbage("collect")	
 end
+
+
+function load_transition()
+	
+	-- set background to black for transition
+	gfx.setBackgroundColor(gfx.kColorBlack)
+	
+	local game_jam_background = gfx.sprite.new()
+	game_jam_background:setImage( background_image )
+	game_jam_background:moveTo(200, 120)
+	game_jam_background:addSprite()
+	
+	-- Set up pixel drummer sprite for transition animation
+	drummer_sprite = AnimatedSprite.new( drummer_spritesheet )
+	drummer_sprite:addState("animate", nil, nil, {tickStep = 1}, true)
+	drummer_sprite:moveTo(280, 96)
+	drummer_sprite:setZIndex(2)
+	
+	-- Set up sprites for fans! 1 fan for each successfull minigame!
+	for i=1, score do
+		local fan_sprite = AnimatedSprite.new( fan_spritesheet )
+		fan_sprite:addState("animate", nil, nil, {tickStep = 1}, true)
+		--fan_sprite:moveTo( math.random(0, 150) , math.random(123, 143) )
+		fan_sprite:moveTo( math.random(0, 130) , math.random(150, 170) )
+		fan_sprite:setZIndex(fan_sprite.y)
+	end
+
+	-- play transition music
+		--> music speeds up as your score increases
+	local music_rate = math.min(1 + time_scaler / 20, 2)
+	jam_music:setRate(music_rate)
+	jam_music:play(0) -- play jam music (loop after it's finished) 
+	
+	timer = playdate.timer.new(2100)
+end	
