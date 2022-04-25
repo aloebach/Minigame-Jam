@@ -13,7 +13,7 @@
 --DEBUG_GAME = "key_to_success"
 --DEBUG_GAME = "solo_pong"
 --DEBUG_GAME = "labyrinth"
-
+--DEBUG_GAME = 'Dashing_Adventurer'
 --SET_FRAME_RATE = 40
 
 -- Import CoreLibs
